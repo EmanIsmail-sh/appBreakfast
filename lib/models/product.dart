@@ -15,11 +15,15 @@ class Product {
 
         @override
   String toString() { 
-    return "{id: $id, name: $name, type: $type, price: $price, quantity: $quantity}";
+    return "{id: $id, name: $name, type: $type, price: $price, quantity: $quantity, shop:$Shop}";
   }
 }
 
 class Shop {
   String id, shop_name;
   Shop({this.id, this.shop_name});
+         @override
+  String toString() { 
+    return "{id: $id, shop_name: $shop_name}";
+  }
 }

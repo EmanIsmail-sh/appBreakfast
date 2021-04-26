@@ -1,3 +1,4 @@
+import 'package:breakfastApp/apis/apisModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
@@ -40,7 +41,7 @@ class ProductProvider extends ChangeNotifier {
   var dio = Dio();
   Future<void> getAllProduct() async {
     print('getallproduct');
-    final String url = 'http://192.168.1.167:8001/api/products';
+    final String url = Apis.products;
     try {
       final response = await dio.get(
         url,
@@ -57,7 +58,11 @@ class ProductProvider extends ChangeNotifier {
               id: e['id'].toString(),
               name: e['name'],
               price: e['price'].toString(),
-              type: e['type']))
+              type: e['type'],
+              shop: Shop(
+                id: e['shop']['id'],
+                shop_name: e['shop']['shop_name']
+              )))
           .toList();
       p.add(Product(
         id: '',
@@ -88,13 +93,11 @@ class ProductProvider extends ChangeNotifier {
     return total;
   }
 
-
-
   Future<void> postOrder() async {
     print('creatOrder for user id $user_id , order ${createOrder()}');
 
-    final String url = 'http://192.168.1.167:8001/api/order';
-    Response  response;
+    final String url = Apis.order;
+    Response response;
     try {
       response = await dio.post(
         url,
@@ -105,19 +108,16 @@ class ProductProvider extends ChangeNotifier {
         }),
       );
       print(' order Res ${response.data}');
-    }on DioError catch (e) {
+    } on DioError catch (e) {
       handleResponseError(e);
-    }
-    
-     catch (error) {
+    } catch (error) {
       print(error);
     }
     notifyListeners();
   }
 
-
-createOrder(){
-  return {
+  createOrder() {
+    return {
       'user_id': user_id,
       'total_price': calculateTotalPriceForOrder(),
       'products': productsInOrder
@@ -125,7 +125,7 @@ createOrder(){
               {'product_id': e.id, 'price': e.price, 'quantity': e.quantity})
           .toList()
     };
-}
+  }
 
   void handleResponseError(DioError e) {
     if (e.response != null) {
@@ -138,5 +138,4 @@ createOrder(){
       print(e.message);
     }
   }
-
 }

@@ -1,3 +1,4 @@
+import 'package:breakfastApp/apis/apisModel.dart';
 import 'package:dio/dio.dart';
 import '../models/user.dart';
 import '../models/library.dart';
@@ -89,7 +90,7 @@ class Auth with ChangeNotifier {
 
   Future<Response> login(String email, String password) async {
     print (' login');
-    final url = 'http://192.168.1.167:8001/api/login';
+    final url = Apis.login;
     Response response = await postUserDataToLogin(url, email, password);
 print ('res login $response');
     try {

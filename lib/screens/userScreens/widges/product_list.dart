@@ -3,9 +3,12 @@ import 'package:breakfastApp/providers/productProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../add_screen.dart';
+import '../myOrdersScreen.dart';
 import 'product_tile.dart';
 
-class ProductList extends StatelessWidget {
+class ProductListScreen extends StatelessWidget {
+  final List<Product> products;
+  ProductListScreen({this.products});
   void showModalToEditProduct(Product product, context, index) {
     print('edit showModalToEditProduct ${product.id}');
     showModalBottomSheet(
@@ -22,7 +25,9 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('prod in listprod $products');
     final productProvider = Provider.of<ProductProvider>(context);
+
     return productProvider.productsInOrder.length == 0
         ? Container(
             width: MediaQuery.of(context).size.width,
@@ -58,9 +63,14 @@ class ProductList extends StatelessWidget {
                 ),
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
-                itemCount: productProvider.productsInOrder.length,
+                itemCount: products != null
+                    ? products.length
+                    : productProvider.productsInOrder.length,
                 itemBuilder: (context, index) {
-                  final product = productProvider.productsInOrder[index];
+                  var product;
+                  products != null
+                      ? product = products[index]
+                      : product = productProvider.productsInOrder[index];
                   return Dismissible(
                     onDismissed: (DismissDirection direction) {
                       print('onDismissed');
@@ -133,7 +143,8 @@ class ProductList extends StatelessWidget {
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '${productProvider.calculateTotalPriceForOrder().toString()} ج ',
+                              text:
+                                  '${productProvider.calculateTotalPriceForOrder().toString()} ج ',
                               style: TextStyle(
                                   color: Colors.blueAccent, fontSize: 18),
                             )
@@ -155,7 +166,26 @@ class ProductList extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(18.0),
                                     side: BorderSide(color: Colors.green)))),
                     onPressed: () {
-                     productProvider.postOrder();
+                      productProvider.postOrder();
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (ctx) => Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: AlertDialog(
+                            content: Text('تم تأكيد الطلب'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('ok'),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(MyOrderScreen.routeName);
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
                       'طلب الاوردر',

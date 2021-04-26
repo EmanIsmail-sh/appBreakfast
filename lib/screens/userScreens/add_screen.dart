@@ -26,8 +26,8 @@ class _AddScreenState extends State<AddScreen> {
         Provider.of<ProductProvider>(context, listen: false).getAllProduct();
   }
 
-  TextEditingController priceController = new TextEditingController();
-  TextEditingController quantityController = new TextEditingController();
+ final TextEditingController priceController =  TextEditingController();
+ final TextEditingController quantityController =  TextEditingController();
 
   Product currentItemp;
   List<DropdownMenuItem<Product>> dropDownItems = [];
@@ -37,8 +37,39 @@ class _AddScreenState extends State<AddScreen> {
     getDropDwonItem();
     getFormValueInEditCase();
     super.initState();
+    handlePriceController();
+    handleQuantityController();
   }
 
+  handlePriceController(){
+     priceController.addListener(() {
+      final String text = priceController.text.toLowerCase();
+      priceController.value = priceController.value.copyWith(
+        text: text,
+        selection:
+            TextSelection(baseOffset: text.length, extentOffset: text.length),
+        composing: TextRange.empty,
+      );
+    });
+    
+  }
+handleQuantityController(){
+ quantityController.addListener(() {
+      final String text = quantityController.text.toLowerCase();
+      quantityController.value = quantityController.value.copyWith(
+        text: text,
+        selection:
+            TextSelection(baseOffset: text.length, extentOffset: text.length),
+        composing: TextRange.empty,
+      );
+    });
+}
+ @override
+  void dispose() {
+    quantityController.dispose();
+    priceController.dispose();
+    super.dispose();
+  }
   isEditCase() {
     if (widget.product != null) {
       return true;

@@ -1,6 +1,6 @@
  
  
- final String domainName = 'http://192.168.1.146:8001/api';
+ final String domainName = 'http://test.darelzokora.com/api';
 class Apis {
 static String login = '$domainName/login';
 static String order = '$domainName/order';

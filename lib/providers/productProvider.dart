@@ -13,6 +13,7 @@ class ProductProvider extends ChangeNotifier {
   }
 
   List<Product> productsInOrder = [];
+
   ProductProvider(this.authToken, this.user_id, this.productsInOrder);
   void addProduct(Product product) {
     print('add ${product.name}');
@@ -60,7 +61,7 @@ class ProductProvider extends ChangeNotifier {
               price: e['price'].toString(),
               type: e['type'],
               shop: Shop(
-                id: e['shop']['id'],
+                id: e['shop']['id'].toString(),
                 shop_name: e['shop']['shop_name']
               )))
           .toList();

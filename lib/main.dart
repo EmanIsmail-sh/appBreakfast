@@ -1,6 +1,7 @@
 import 'package:breakfastApp/providers/orderProvider.dart';
 import 'package:breakfastApp/providers/productProvider.dart';
-import 'package:breakfastApp/screens/userScreens/createOrderScreen.dart';
+import './screens/userScreens/createOrderScreen.dart';
+import './screens/adminScreen/ordersSummaryScreen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'models/routes.dart';
 import 'screens/authScreens/signIn.dart';
@@ -52,8 +53,8 @@ class MyApp extends StatelessWidget {
               // iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
               iconTheme: IconThemeData(color: Color(0xFFf75802)),
               textTheme: TextTheme(bodyText1: TextStyle(fontFamily: 'cairo'))),
-          home: auth.isAuth
-              ? CreatOrderScreen()
+          home: auth.isAuth 
+              ? auth.gender =='0'? CreatOrderScreen(): OrderSummaryScreen()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapshot) => SignInScreen(),

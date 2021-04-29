@@ -1,3 +1,4 @@
+import 'package:breakfastApp/providers/productProvider.dart';
 import 'package:breakfastApp/screens/userScreens/myOrdersScreen.dart';
 
 import '../models/library.dart';
@@ -29,12 +30,12 @@ class AppDrawer extends StatelessWidget {
                       color: Colors.blueGrey[800],
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
-                      fontFamily:
-                          Theme.of(context).textTheme.bodyText1.fontFamily,
+                      fontFamily:Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
+                    Provider.of<ProductProvider>(context,listen: false).productsInOrder.clear();
                     Navigator.of(context).pushReplacementNamed('/');
                   },
                 ),

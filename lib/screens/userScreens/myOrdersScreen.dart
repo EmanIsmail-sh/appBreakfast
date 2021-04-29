@@ -1,10 +1,10 @@
 import 'package:breakfastApp/models/library.dart';
+import 'package:breakfastApp/models/product.dart';
 import 'package:breakfastApp/providers/orderProvider.dart';
+import 'package:breakfastApp/providers/productProvider.dart';
 import 'package:breakfastApp/screens/userScreens/createOrderScreen.dart';
 import 'package:flutter/material.dart';
 
-import 'widges/product_list.dart';
-import 'widges/product_tile.dart';
 
 class MyOrderScreen extends StatefulWidget {
   static String routeName = 'MyOrderScreen';
@@ -16,7 +16,6 @@ class MyOrderScreen extends StatefulWidget {
 class _MyOrderScreenState extends State<MyOrderScreen> {
   bool isSearching = false;
   DateTime selectedDate = DateTime.now();
-
   @override
   void initState() {
     print('my order');
@@ -44,6 +43,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -231,7 +231,15 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                             order.state == 'unpaid'
                                                 ? RaisedButton.icon(
                                                     onPressed: () {
-                                                      Navigator.of(context).pushNamed(CreatOrderScreen.routeName,arguments:order.products );
+                                               Provider.of<ProductProvider>(context,listen: false).productsInOrder.clear();
+                                               for(var i in order.products){
+                                              Provider.of<ProductProvider>(context,listen: false).addProduct(i);
+
+                                               }
+
+                                              // Navigator.of(context).pushNamed(CreatOrderScreen.routeName,arguments:order.products );
+                                              Navigator.of(context).pushNamed(CreatOrderScreen.routeName,arguments: order );
+
                                                     },
                                                     icon: Icon(
                                                       Icons.edit,

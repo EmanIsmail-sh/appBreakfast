@@ -72,6 +72,39 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  
+  
+  
+  
+   Future<void> updateOrder(order_id,order) async {
+    print('update for user id $order_id , order $order');
+
+    final String url = Apis.order +'/'+ order_id;
+    Response response;
+    try {
+      response = await dio.put(
+        url,
+        data: order,
+        options: Options(headers: {
+          "Accept": "application/json",
+          'Authorization': "Bearer $authToken"
+        }),
+      );
+      print('update order Res ${response.data}');
+    } on DioError catch (e) {
+      handleResponseError(e);
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+  }
+
+  
+
+ 
+  
+  
+  
   void handleResponseError(DioError e) {
     if (e.response != null) {
       print(e.error);

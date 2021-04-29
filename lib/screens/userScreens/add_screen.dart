@@ -248,7 +248,7 @@ handleQuantityController(){
                     textbutton: widget.product != null ? 'تعديل' : 'اضافه',
                     onPressed: () {
                       widget.product == null
-                          ? productProvider.addProduct(Product(
+                          ?  productProvider.addProduct(Product(
                                   id: currentItemp.id,
                                   name: currentItemp.name,
                                   // price: priceController.text,
@@ -257,7 +257,7 @@ handleQuantityController(){
                                       priceController.text).toString(),
                                   quantity: quantityController.text,
                                   type: currentItemp.type) ??
-                              'new Task')
+                              'new Task') 
                           : productProvider.editProduct(
                               Product(
                                   id: currentItemp.id,

@@ -1,4 +1,5 @@
 import 'package:breakfastApp/models/library.dart';
+import 'package:breakfastApp/models/order.dart';
 import 'package:breakfastApp/models/product.dart';
 import 'package:breakfastApp/screens/userScreens/widges/product_list.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class CreatOrderScreen extends StatelessWidget {
   static String routeName = 'createOrderScreen';
   @override
   Widget build(BuildContext context) {
- final List<Product> args = ModalRoute.of(context).settings.arguments;
+ Order args = ModalRoute.of(context).settings.arguments;
     print('args $args');
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -48,7 +49,9 @@ class CreatOrderScreen extends StatelessWidget {
                         topRight: Radius.circular(30),
                       ),
                     ),
-                    child:args!=null?ProductListScreen(products: args,):  ProductListScreen(),
+                    // child:args!=null?ProductListScreen(products: args,):  ProductListScreen(),
+                    // child: ProductListScreen(products: args),
+                    child: ProductListScreen(myOrder: args,),
                   ),
                 ),
               ],

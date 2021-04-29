@@ -1,4 +1,6 @@
-import 'package:breakfastApp/models/product.dart';
+import '../../../models/order.dart';
+import '../../../models/product.dart';
+import 'package:breakfastApp/providers/orderProvider.dart';
 import 'package:breakfastApp/providers/productProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,9 +8,15 @@ import '../add_screen.dart';
 import '../myOrdersScreen.dart';
 import 'product_tile.dart';
 
-class ProductListScreen extends StatelessWidget {
-  final List<Product> products;
-  ProductListScreen({this.products});
+class ProductListScreen extends StatefulWidget {
+ final Order myOrder ;
+  ProductListScreen({this.myOrder});
+
+  @override
+  _ProductListScreenState createState() => _ProductListScreenState();
+}
+
+class _ProductListScreenState extends State<ProductListScreen> {
   void showModalToEditProduct(Product product, context, index) {
     print('edit showModalToEditProduct ${product.id}');
     showModalBottomSheet(
@@ -23,12 +31,29 @@ class ProductListScreen extends StatelessWidget {
     );
   }
 
+  // List<Product> productts = [];
+
+  List<Product> productProvider=[];
+
+  // setProductList(context) {
+  //   productProvider = Provider.of<ProductProvider>(context).productsInOrder;
+
+  //   // if (widget.products == null) {
+  //   //   productts = productProvider;
+  //   //   return;
+  //   // }
+  //   //    productts =widget.products;
+  // }
+
   @override
   Widget build(BuildContext context) {
-    print('prod in listprod $products');
+   print('myorder in product_list ${widget.myOrder}');
     final productProvider = Provider.of<ProductProvider>(context);
-
+    final orderProvider = Provider.of<OrderProvider>(context);
+    print('productProvider.productsInOrder ${productProvider.productsInOrder}');
     return productProvider.productsInOrder.length == 0
+
+        // products.length==0
         ? Container(
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -63,14 +88,18 @@ class ProductListScreen extends StatelessWidget {
                 ),
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
-                itemCount: products != null
-                    ? products.length
-                    : productProvider.productsInOrder.length,
+                itemCount: productProvider.productsInOrder.length,
+                // products != []
+                //     ? products.length
+                //     : productProvider.productsInOrder.length,
                 itemBuilder: (context, index) {
-                  var product;
-                  products != null
-                      ? product = products[index]
-                      : product = productProvider.productsInOrder[index];
+                  // var product;
+                  // products != []
+                  //     ? product = products[index]
+                  //     : product = productProvider.productsInOrder[index];
+                  // product = products[index];
+                  Product product = productProvider.productsInOrder[index];
+                  print('products in itembuilder$product');
                   return Dismissible(
                     onDismissed: (DismissDirection direction) {
                       print('onDismissed');
@@ -110,7 +139,7 @@ class ProductListScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    key: ObjectKey(productProvider.productsInOrder[index]),
+                    key: ObjectKey(product),
 
                     // ignore: missing_return
                     confirmDismiss: (direction) {
@@ -166,20 +195,29 @@ class ProductListScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(18.0),
                                     side: BorderSide(color: Colors.green)))),
                     onPressed: () {
-                      productProvider.postOrder();
+                widget.myOrder != null?orderProvider.updateOrder(widget.myOrder.id, {
+      'user_id':widget.myOrder.id ,
+      'total_price':productProvider. calculateTotalPriceForOrder(),
+      'products': productProvider.productsInOrder
+          .map((e) =>
+              {'product_id': e.id, 'price': e.price, 'quantity': e.quantity})
+          .toList()
+    })  :     productProvider.postOrder();
                       showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (ctx) => Directionality(
                           textDirection: TextDirection.rtl,
                           child: AlertDialog(
-                            content: Text('تم تأكيد الطلب'),
+                            content:widget.myOrder!=null? Text('تم تعديل طلبك'): Text('تم تأكيد الطلب'),
                             actions: <Widget>[
                               FlatButton(
                                 child: Text('ok'),
                                 onPressed: () {
+                                Navigator.pop(context);
                                   Navigator.of(context)
                                       .pushNamed(MyOrderScreen.routeName);
+                                      Provider.of<ProductProvider>(context,listen: false).productsInOrder.clear();
                                 },
                               )
                             ],
@@ -187,7 +225,17 @@ class ProductListScreen extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text(
+                    child:widget.myOrder!=null? Text(
+                      'تعديل الاوردر',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily:
+                            Theme.of(context).textTheme.bodyText1.fontFamily,
+                      ),
+                    ):
+                    Text(
                       'طلب الاوردر',
                       style: TextStyle(
                         color: Colors.white,
@@ -196,7 +244,10 @@ class ProductListScreen extends StatelessWidget {
                         fontFamily:
                             Theme.of(context).textTheme.bodyText1.fontFamily,
                       ),
-                    ),
+                    )
+                    
+                    
+                    ,
                   ),
                 ],
               ),

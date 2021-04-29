@@ -25,6 +25,10 @@ class Auth with ChangeNotifier {
     return token != null;
   }
 
+  String get gender {
+    return userInformation['gender'];
+  }
+
   String get token {
     // if (_expiryDate != null && _expiryDate.isAfter(DateTime.now()) && _token != null) {  //open comment if ther token rxpire date
     if (_token != null) {

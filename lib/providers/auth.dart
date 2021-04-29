@@ -25,7 +25,7 @@ class Auth with ChangeNotifier {
     return token != null;
   }
 
-  String get gender {
+  int get gender {
     return userInformation['gender'];
   }
 

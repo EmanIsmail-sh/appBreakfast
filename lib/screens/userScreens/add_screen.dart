@@ -237,9 +237,9 @@ handleQuantityController(){
                       : true,
                 ),
                 SizedBox(height: 10),
-                Text((currentItemp != null)
-                    ? "selected product name is ${currentItemp.name} : and price is : ${currentItemp.price}"
-                    : ''),
+                // Text((currentItemp != null)
+                //     ? "selected product name is ${currentItemp.name} : and price is : ${currentItemp.price}"
+                //     : ''),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 90),
                   child: CustomButtonWidget(

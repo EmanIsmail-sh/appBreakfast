@@ -4,27 +4,25 @@ import 'package:breakfastApp/models/product.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class OrderProvider extends ChangeNotifier {
+class AdminOrderProvider extends ChangeNotifier {
   final String authToken;
   final String user_id;
-  List<Order> _orders = [];
-  List<Order> get orders {
-    return [..._orders];
+  List<Order> _allOrdersForAllUsers = [];
+  List<Order> get allOrdersForAllUsers {
+    return [..._allOrdersForAllUsers];
   }
 
-  OrderProvider(this.authToken, this.user_id, this._orders);
+  AdminOrderProvider(this.authToken, this.user_id, this._allOrdersForAllUsers);
 
   var dio = Dio();
-  Future<void> getOrderByDate(date) async {
-    print("${date.toLocal()}".split(' ')[0]);
-    final dateFormate = "${date.toLocal()}".split(' ')[0];
-    final String url = Apis.orderByDate;
+  Future<void> getAllOrdersForAllUsers() async {
+    print('getadmin ordercrgv');
+    final String url = Apis.orders;
     Response response;
     try {
       print('$authToken');
-      response = await dio.post(
+      response = await dio.get(
         url,
-        data: {'today': dateFormate},
         options: Options(headers: {
           "Accept": "application/json",
           'Authorization': "Bearer $authToken"
@@ -33,7 +31,7 @@ class OrderProvider extends ChangeNotifier {
       // print(' orderByDate Res ${response.data}');
       List<Order> orderList = [];
       // print('res${response.data['products']}');
-      var res = response.data['order'] as List<dynamic>;
+      var res = response.data['orders'] as List<dynamic>;
       orderList = res
           .map(
             (e) => Order(
@@ -59,8 +57,8 @@ class OrderProvider extends ChangeNotifier {
             ),
           ).toList();
 
-      _orders = orderList;
-      print('order $_orders');
+      _allOrdersForAllUsers = orderList;
+      print('_allOrdersForAllUsers $_allOrdersForAllUsers');
     } on DioError catch (e) {
       handleResponseError(e);
     } catch (error) {
@@ -74,21 +72,21 @@ class OrderProvider extends ChangeNotifier {
   
   
   
-   Future<void> updateOrder(order_id,order) async {
-    print('update for user id $order_id , order $order');
+   Future<void> updateOrderState(order_id,state) async {
+    print('update state for order $state');
 
-    final String url = Apis.order +'/'+ order_id;
+    final String url = Apis.updateState +'/'+ order_id;
     Response response;
     try {
       response = await dio.put(
         url,
-        data: order,
+        data: {state:state},
         options: Options(headers: {
           "Accept": "application/json",
           'Authorization': "Bearer $authToken"
         }),
       );
-      print('update order Res ${response.data}');
+      print('update state order Res ${response.data}');
     } on DioError catch (e) {
       handleResponseError(e);
     } catch (error) {

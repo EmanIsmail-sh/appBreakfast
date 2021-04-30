@@ -109,8 +109,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  // shrinkWrap: true,
-                  // physics: ClampingScrollPhysics(),
+                  reverse: true,
                   itemCount: orderProvider.orders.length,
                   itemBuilder: (ctx, i) {
                     final order = orderProvider.orders[i];

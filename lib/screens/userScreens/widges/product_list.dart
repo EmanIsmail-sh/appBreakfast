@@ -195,7 +195,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                       side: BorderSide(color: Colors.green)))),
-                      onPressed: () {
+                      onPressed: () async {
                   widget.myOrder != null?orderProvider.updateOrder(widget.myOrder.id, {
       'user_id':widget.myOrder.id ,
       'total_price':productProvider. calculateTotalPriceForOrder(),
@@ -203,14 +203,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
             .map((e) =>
                 {'product_id': e.id, 'price': e.price, 'quantity': e.quantity})
             .toList()
-    })  :     productProvider.postOrder();
-                        showDialog(
+    })  :    await productProvider.postOrder();
+    print('kfvjhdchvjh${productProvider.orderRes}');
+                    showDialog(
                           context: context,
                           barrierDismissible: false,
                           builder: (ctx) => Directionality(
                             textDirection: TextDirection.rtl,
                             child: AlertDialog(
-                              content:widget.myOrder!=null? Text('تم تعديل طلبك'): Text('تم تأكيد الطلب'),
+                              content:productProvider.orderRes =='false'? Text('تم انتهاء الوقت'):( widget.myOrder!=null? Text('تم تعديل طلبك'): Text('تم تأكيد الطلب')),
                               actions: <Widget>[
                                 FlatButton(
                                   child: Text('ok'),

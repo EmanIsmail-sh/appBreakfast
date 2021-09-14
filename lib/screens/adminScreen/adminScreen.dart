@@ -18,10 +18,18 @@ class _AdminScreenState extends State<AdminScreen> {
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            child: Text('logout'),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/');
+              Provider.of<Auth>(context, listen: false).logout();
+            },
+          ),
           appBar: AppBar(
-            bottom: TabBar(indicatorSize: TabBarIndicatorSize.tab,
-            indicatorColor: Colors.red[900],
-            isScrollable: true,
+            bottom: TabBar(
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorColor: Colors.red[900],
+                isScrollable: true,
                 // isScrollable: true,
                 tabs: [
                   buildTab(" طلبات اليوم", context),
@@ -40,15 +48,14 @@ Tab buildTab(String title, BuildContext context) {
   return Tab(
     child: Align(
       alignment: Alignment.center,
-      
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Text(
           title,
-        
           style: TextStyle(
               fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
-              fontWeight: FontWeight.bold,fontSize: 17),
+              fontWeight: FontWeight.bold,
+              fontSize: 17),
         ),
       ),
     ),

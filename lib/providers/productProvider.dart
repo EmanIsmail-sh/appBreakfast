@@ -1,13 +1,16 @@
 import 'package:breakfastApp/apis/apisModel.dart';
+import 'package:breakfastApp/models/toastMessage.dart';
+import 'package:breakfastApp/screens/userScreens/myOrdersScreen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/product.dart';
 
 class ProductProvider extends ChangeNotifier {
   final String authToken;
   final String user_id;
   List<Product> _allProduct = [];
-
+String orderRes;
   List<Product> get allProduct {
     return [..._allProduct];
   }
@@ -54,17 +57,19 @@ class ProductProvider extends ChangeNotifier {
       List<Product> p = [];
       // print('res${response.data['products']}');
       var res = response.data['products'] as List<dynamic>;
+      print('products res $res');
       p = res
           .map((e) => Product(
               id: e['id'].toString(),
               name: e['name'],
               price: e['price'].toString(),
               type: e['type'],
-              shop: Shop(
+              shop: e['shop']!=null? Shop(
                 id: e['shop']['id'].toString(),
                 shop_name: e['shop']['shop_name']
-              )))
+              ):null))
           .toList();
+           print('products p $p');
       p.add(Product(
         id: '',
         name: '',
@@ -109,13 +114,19 @@ class ProductProvider extends ChangeNotifier {
         }),
       );
       print(' order Res ${response.data}');
+      orderRes = response.data.toString();
+      
     } on DioError catch (e) {
       handleResponseError(e);
     } catch (error) {
       print(error);
     }
     notifyListeners();
+    
   }
+
+
+
 
   createOrder() {
     return {

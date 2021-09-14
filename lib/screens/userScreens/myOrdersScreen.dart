@@ -1,4 +1,5 @@
 import 'package:breakfastApp/models/library.dart';
+import 'package:breakfastApp/models/order.dart';
 import 'package:breakfastApp/models/product.dart';
 import 'package:breakfastApp/providers/orderProvider.dart';
 import 'package:breakfastApp/providers/productProvider.dart';
@@ -109,10 +110,10 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  reverse: true,
                   itemCount: orderProvider.orders.length,
                   itemBuilder: (ctx, i) {
-                    final order = orderProvider.orders[i];
+                    final List<Order> list = orderProvider.orders.reversed.toList();
+                    final order = list[i];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(

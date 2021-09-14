@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
               iconTheme: IconThemeData(color: Color(0xFFf75802)),
               textTheme: TextTheme(bodyText1: TextStyle(fontFamily: 'cairo'))),
           home: auth.isAuth 
-              ? auth.gender == 0?  AdminScreen(): CreatOrderScreen()
+              ? auth.gender == 1?  AdminScreen(): CreatOrderScreen()
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (ctx, authResultSnapshot) => SignInScreen(),

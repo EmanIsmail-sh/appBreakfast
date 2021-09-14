@@ -45,7 +45,7 @@ class Auth with ChangeNotifier {
     return _userInformation['id'].toString();
   }
 
-  var dio = Dio();
+  var dio = Dio();  
   // Future<void> register(User newUser) async {
   //   final url = 'https://doctor-tawasol.com/api/register';
   //   Map<String, String> newUserData = prepareUserData(newUser);
@@ -91,15 +91,40 @@ class Auth with ChangeNotifier {
       print(e.message);
     }
   }
+// ======================================================
+Future<void> getArticals(String articleType) async {
+    final httpUrl = 'https://doctor-tawasol.com/api/articles/$articleType';
+
+    try {
+      final res = await dio.get(httpUrl);
+           print('res $res');
+
+    } catch (error) {
+      print('catch art error $error');
+      throw error;
+    }
+  }
+
+// ======================================================
+
+
+
+
+
+
+
+
 
   Future<Response> login(String email, String password) async {
-    print (' login');
+    print(' login');
     final url = Apis.login;
     Response response = await postUserDataToLogin(url, email, password);
-print ('res login $response');
+    print('$url  res login $response');
     try {
+      print('xxxxxxxxxx $response');
       _authenticate(response);
     } on DioError catch (e) {
+      print('eeeeeeeeeeeee $response');
       handleResponseError(e);
     } catch (error) {
       print('login response error');
@@ -110,10 +135,12 @@ print ('res login $response');
 
   Future<Response> postUserDataToLogin(
       String url, String email, String password) async {
-            print (' postUserDataToLogin $email $password');
-
-    final response =
-        await dio.post(url, data: {'email': email, 'password': password});
+    print(' postUserDataToLogin $url $email $password');
+    dio.options.headers['content-Type'] = 'application/json';
+    final response = await dio.post(
+      url,
+      data: {'email': email, 'password': password}
+    );
     print('res postUserDataToLoginfun ${response}');
     return response;
   }
@@ -233,8 +260,7 @@ print ('res login $response');
     // }
     // geAllDataUserToAutoLogin(
     //     extractedUserTokenInfo, expiryDate, extractUserInfo);
-         geAllDataUserToAutoLogin(
-        extractedUserTokenInfo, extractUserInfo);
+    geAllDataUserToAutoLogin(extractedUserTokenInfo, extractUserInfo);
     print('token auto login $token , is auth $isAuth tokenType $tokenType');
 
     notifyListeners();
@@ -267,6 +293,5 @@ print ('res login $response');
     _userInformation['name'] = extractUserInfo['name'];
     _userInformation['email'] = extractUserInfo['email'];
     _userInformation['gender'] = extractUserInfo['gender'];
-  
   }
 }

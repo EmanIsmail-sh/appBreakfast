@@ -1,6 +1,6 @@
  
  
- final String domainName = 'http://test.darelzokora.com/api';
+ final String domainName = 'http://fatrny.tawasol-ba.com/api';
 class Apis {
 static String login = '$domainName/login';
 static String order = '$domainName/order';

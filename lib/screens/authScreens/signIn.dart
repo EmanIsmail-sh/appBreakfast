@@ -1,3 +1,4 @@
+import 'package:breakfastApp/screens/userScreens/createOrderScreen.dart';
 import 'package:dio/dio.dart';
 import '../../models/library.dart';
 import '../../models/errorDialog.dart';
@@ -29,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
       _showLoading();
       await _sendUserDataToLogin();
     } on DioError catch (error) {
-      print(error);
+      print('DIO ERROR HANDLER $error');
       _handleError(error);
     } catch (error) {
       print('login error');
@@ -66,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void actionAfterLoginSuccessflly() {
     ToastMessage.showToast('تم تسجيل الدخول بنجاح');
-    // Navigator.of(context).pushReplacementNamed(ConsultingListScreen.routeName);
+    // Navigator.of(context).pushReplacementNamed(CreatOrderScreen.routeName);
   }
 
   void _showLoading() {
@@ -142,12 +143,14 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [ 
                 // pageTitle,
               Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 90),
-              child: Image(image: AssetImage('assets/taco.png',),
-              height: 250,
-              alignment: Alignment.bottomCenter,
-              fit: BoxFit.cover,
-              
+              padding: const EdgeInsets.symmetric(horizontal: 70),
+              child: SizedBox(
+                child: Image(image: AssetImage('assets/taco.png',),
+                height: 250,
+                alignment: Alignment.bottomCenter,
+                fit: BoxFit.cover,
+                
+                ),
               ),
             ),
             pageTitle,

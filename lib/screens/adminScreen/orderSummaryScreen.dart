@@ -44,10 +44,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                 decoration: BoxDecoration(
                   border: Border.all(),
                 ),
-                              child: ExpansionTile(
+                child: ExpansionTile(
                   // trailing: Text(order.user_id),
-                  leading: 
-                  IconButton(
+                  leading: IconButton(
                     icon: order.state == 'paid'
                         ? Icon(
                             Icons.check,
@@ -61,9 +60,9 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                       if (order.state == 'paid') {
                         return;
                       }
-                    await  adminProvider.updateOrderState(order.id, 'paid');
-                    getApiAllOrders();
-
+                      await adminProvider.updateOrderState(order.id, 'paid');
+                      await getApiAllOrders();
+                      setState(() {});
                       ToastMessage.showToast('تم التحصيل');
                     },
                   ),
@@ -72,45 +71,52 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                     children: [
                       Expanded(
                         child: Text('ايمان اسماعيل شعبان',
-                         overflow: TextOverflow.ellipsis,
-                        //  maxLines: 1,
-                        // softWrap: false,
-                         style: TextStyle(
-                          color:Theme.of(context).primaryColor ,
+                            overflow: TextOverflow.ellipsis,
+                            //  maxLines: 1,
+                            // softWrap: false,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .fontFamily,
+                            )),
+                      ),
+                      Text('${order.total_price.toString()} ج',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
-                            fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
+                            fontFamily: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                .fontFamily,
                           )),
-                      ),
-                       
-                       
-                         Text('${order.total_price.toString()} ج' , style: TextStyle(
-                        color:Theme.of(context).primaryColor ,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
-                        )),
-                       
                     ],
                   ),
                   children: [
                     Container(
-                        height: MediaQuery.of(context).size.height *.5,
+                        height: MediaQuery.of(context).size.height * .5,
                         child: ListView.builder(
                           itemCount: order.products.length,
                           itemBuilder: (ctx, i) {
                             final product = order.products[i];
                             return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
-                              child: Text(product.name,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .fontFamily,
-                                  ),),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 5),
+                              child: Text(
+                                product.name,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .fontFamily,
+                                ),
+                              ),
                             );
                           },
                         )),

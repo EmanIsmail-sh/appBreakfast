@@ -1,6 +1,7 @@
 import 'package:breakfastApp/apis/apisModel.dart';
 import 'package:breakfastApp/models/order.dart';
 import 'package:breakfastApp/models/product.dart';
+import 'package:breakfastApp/models/toastMessage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -101,10 +102,6 @@ class OrderProvider extends ChangeNotifier {
 
   
 
- 
-  
-  
-  
   void handleResponseError(DioError e) {
     if (e.response != null) {
       print(e.error);
@@ -116,4 +113,27 @@ class OrderProvider extends ChangeNotifier {
       print(e.message);
     }
   }
+
+int deleteOrderRes;
+Future<void> deleteOrderById(order_id) async {
+final String url = Apis.order +'/'+ order_id;
+    Response response;
+    try{
+      response = await dio.delete(
+        url,
+        options: Options(headers: {
+          "Accept": "application/json",
+          'Authorization': "Bearer $authToken"
+        }),
+      );
+         print('delete order Res ${response.data}');
+        deleteOrderRes = response.data;
+    }on DioError catch (e) {
+      handleResponseError(e);
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+}
+
 }

@@ -1,10 +1,12 @@
 import 'package:breakfastApp/models/library.dart';
 import 'package:breakfastApp/models/order.dart';
 import 'package:breakfastApp/models/product.dart';
+import 'package:breakfastApp/models/toastMessage.dart';
 import 'package:breakfastApp/providers/orderProvider.dart';
 import 'package:breakfastApp/providers/productProvider.dart';
 import 'package:breakfastApp/screens/userScreens/createOrderScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 
 class MyOrderScreen extends StatefulWidget {
@@ -118,7 +120,7 @@ calculateTotalPriceForOneProduct(quantity, productPrice) {
                   itemBuilder: (ctx, i) {
                     final List<Order> list = orderProvider.orders.reversed.toList();
                     final order = list[i];
-                    print('my order screen $order');
+                    print('my order screen ${order.id}');
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -130,15 +132,54 @@ calculateTotalPriceForOneProduct(quantity, productPrice) {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('اوردر رقم ${i + 1}   ',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .fontFamily,
-                                      )),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      
+                                      Text('اوردر رقم ${i + 1}   ',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .fontFamily,
+                                          )),
+                                   FlatButton.icon(onPressed: (){
+                                    orderProvider.deleteOrderById(order.id);
+                                   print('order dele res${orderProvider.deleteOrderRes}');
+                                    showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (ctx) => Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: AlertDialog(
+                              content: Text('تم حذف الطلب'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('ok'),
+                                  onPressed: () {
+                                  Navigator.pop(context);
+                                    Navigator.of(context)
+                                        .pushNamed(CreatOrderScreen.routeName);
+                                        // Provider.of<ProductProvider>(context,listen: false).productsInOrder.clear();
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                                    //  ToastMessage.showToast(orderProvider.deleteOrderRes.toString());
+                                      // Navigator.of(context)
+                                      //   .pushNamed(MyOrderScreen.routeName);
+                                   },   icon: Icon(
+                                                      Icons.delete,
+                                                      color: Colors.red,
+                                                    ), label: Text(''))
+                                   
+                                    ],
+                                  ),
+                                      
                                   Divider(
                                     thickness: 1,
                                     color: Theme.of(context).primaryColor,
@@ -282,6 +323,9 @@ calculateTotalPriceForOneProduct(quantity, productPrice) {
                                                       ),
                                                   ],
                                                 )
+                                         
+                                        , 
+                                         
                                           ],
                                         ),
                                       ],

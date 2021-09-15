@@ -291,10 +291,10 @@ handleNotesController(){
                               Product(
                                   id: currentItemp.id,
                                   name: currentItemp.name,
-                                  // price: priceController.text,
-                                   price: calculateTotalPriceForOneProduct(
-                                      quantityController.text,
-                                      priceController.text).toString(),
+                                  price: priceController.text,
+                                  //  price: calculateTotalPriceForOneProduct(
+                                  //     quantityController.text,
+                                  //     priceController.text).toString(),
                                   quantity: quantityController.text,
                                   type: currentItemp.type,
                                   notes: notesController.text,

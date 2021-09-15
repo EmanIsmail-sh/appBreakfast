@@ -17,7 +17,11 @@ class _ProductTileState extends State<ProductTile> {
     print('product_tile ${widget.product}');
     super.initState();
   }
-
+ calculateTotalPriceForOneProduct(quantity, productPrice) {
+    print('productPrice $productPrice quantity $quantity');
+    print('total ${num.parse(productPrice) * num.parse(quantity)}');
+    return num.parse(productPrice) * num.parse(quantity);
+  }
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -41,8 +45,7 @@ class _ProductTileState extends State<ProductTile> {
         ),
         Expanded(
           child: ListTile(
-            title: Text(
-              widget.product.name ?? 'product name',
+            title: Text(widget.product.notes != null?widget.product.name +' '+ widget.product.notes:widget.product.name,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -66,7 +69,10 @@ class _ProductTileState extends State<ProductTile> {
               ),
               child: Center(
                   child: Text(
-                '${widget.product.price} ج ',
+                // '${widget.product.price} ج ',
+                calculateTotalPriceForOneProduct(
+                                      widget.product.quantity,
+                                      widget.product.price).toString(),
                 textDirection: TextDirection.rtl,
                 style: TextStyle(
                   color: Colors.white,

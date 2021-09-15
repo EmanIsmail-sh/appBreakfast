@@ -28,6 +28,7 @@ class _AddScreenState extends State<AddScreen> {
 
  final TextEditingController priceController =  TextEditingController();
  final TextEditingController quantityController =  TextEditingController();
+ final TextEditingController notesController =  TextEditingController();
 
   Product currentItemp;
   List<DropdownMenuItem<Product>> dropDownItems = [];
@@ -39,6 +40,7 @@ class _AddScreenState extends State<AddScreen> {
     super.initState();
     handlePriceController();
     handleQuantityController();
+    handleNotesController();
   }
 
   handlePriceController(){
@@ -64,10 +66,23 @@ handleQuantityController(){
       );
     });
 }
+
+handleNotesController(){
+ notesController.addListener(() {
+      final String text = notesController.text.toLowerCase();
+      notesController.value = notesController.value.copyWith(
+        text: text,
+        selection:
+            TextSelection(baseOffset: text.length, extentOffset: text.length),
+        composing: TextRange.empty,
+      );
+    });
+}
  @override
   void dispose() {
     quantityController.dispose();
     priceController.dispose();
+    notesController.dispose();
     super.dispose();
   }
   isEditCase() {
@@ -83,6 +98,7 @@ handleQuantityController(){
     }
     priceController.text = widget.product.price;
     quantityController.text = widget.product.quantity;
+    notesController.text = widget.product.notes;
   }
 
   getDropDwonItem() async {
@@ -237,6 +253,15 @@ handleQuantityController(){
                       : true,
                 ),
                 SizedBox(height: 10),
+                CustomTextFormField(
+                  textController: notesController,
+                  onChanged: (value) => notesController.text = value,
+                  inputType: TextInputType.text,
+                 labelText: 'ملاحظات',
+                 hintText: 'ملاحظات', 
+                 color: Theme.of(context).primaryColor, 
+                 backTextColor: Colors.transparent),
+                SizedBox(height: 10),
                 // Text((currentItemp != null)
                 //     ? "selected product name is ${currentItemp.name} : and price is : ${currentItemp.price}"
                 //     : ''),
@@ -251,12 +276,16 @@ handleQuantityController(){
                           ?  productProvider.addProduct(Product(
                                   id: currentItemp.id,
                                   name: currentItemp.name,
-                                  // price: priceController.text,
-                                  price: calculateTotalPriceForOneProduct(
-                                      quantityController.text,
-                                      priceController.text).toString(),
+                                  price: priceController.text,
+                                  // price: calculateTotalPriceForOneProduct(
+                                  //     quantityController.text,
+                                  //     priceController.text).toString(),
+
                                   quantity: quantityController.text,
-                                  type: currentItemp.type) ??
+                                  type: currentItemp.type,
+                                  notes: notesController.text,
+                                  shop: Shop(id: currentItemp.shop.id,shop_name: currentItemp.shop.shop_name)
+                                  ) ??
                               'new Task') 
                           : productProvider.editProduct(
                               Product(
@@ -267,7 +296,9 @@ handleQuantityController(){
                                       quantityController.text,
                                       priceController.text).toString(),
                                   quantity: quantityController.text,
-                                  type: currentItemp.type),
+                                  type: currentItemp.type,
+                                  notes: notesController.text,
+                                  shop: Shop(id: currentItemp.shop.id,shop_name: currentItemp.shop.shop_name)),
                               widget.index);
                       print(
                           'add_screen line 202 => name  ${currentItemp.name} , id ${currentItemp.name}');

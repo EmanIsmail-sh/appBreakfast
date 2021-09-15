@@ -41,7 +41,11 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
     final orderProvider = Provider.of<OrderProvider>(context, listen: false);
     orderProvider.getOrderByDate(date);
   }
-
+calculateTotalPriceForOneProduct(quantity, productPrice) {
+    print('productPrice $productPrice quantity $quantity');
+    print('total ${num.parse(productPrice) * num.parse(quantity)}');
+    return num.parse(productPrice) * num.parse(quantity);
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -114,6 +118,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                   itemBuilder: (ctx, i) {
                     final List<Order> list = orderProvider.orders.reversed.toList();
                     final order = list[i];
+                    print('my order screen $order');
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -154,7 +159,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text(order.products[i].name,
+                                                    Text(order.products[i].notes!=null? order.products[i].name +' '+ order.products[i].notes:order.products[i].name,
                                                         style: TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:
@@ -169,8 +174,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                                                         )),
                                                     Text(order
                                                         .products[i].quantity),
-                                                    Text(
-                                                        '${order.products[i].price}ج',
+                                                    Text(calculateTotalPriceForOneProduct(order.products[i].quantity,order.products[i].price).toString(),
+                                                        // '${order.products[i].price}ج',
                                                         style: TextStyle(
                                                           fontSize: 16,
                                                           fontWeight:

@@ -201,10 +201,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
       'total_price':productProvider. calculateTotalPriceForOrder(),
       'products': productProvider.productsInOrder
             .map((e) =>
-                {'product_id': e.id, 'price': e.price, 'quantity': e.quantity})
+       {'product_id': e.id, 'price': e.price, 'quantity': e.quantity,'otherProduct':e.notes, 'shop_name':e.shop.shop_name})
+
+                
             .toList()
     })  :    await productProvider.postOrder();
-    print('kfvjhdchvjh${productProvider.orderRes}');
+    print('orderRes${productProvider.orderRes}');
                     showDialog(
                           context: context,
                           barrierDismissible: false,

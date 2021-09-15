@@ -19,7 +19,7 @@ String orderRes;
 
   ProductProvider(this.authToken, this.user_id, this.productsInOrder);
   void addProduct(Product product) {
-    print('add ${product.name}');
+    print('add ${product.price}');
     productsInOrder.add(product);
     notifyListeners();
   }
@@ -88,14 +88,23 @@ String orderRes;
   get productName {
     return _productName;
   }
-
+calculateTotalPriceForOneProduct(quantity, productPrice) {
+    print('productPrice $productPrice quantity $quantity');
+    print('total ${num.parse(productPrice) * num.parse(quantity)}');
+    return num.parse(productPrice) * num.parse(quantity);
+  }
   calculateTotalPriceForOrder() {
     if (productsInOrder == null) {
       return;
     }
+    List sumForOneProducts =[];
+    for(int i=0; i<productsInOrder.length; i++){
+dynamic sumForOneProduct = calculateTotalPriceForOneProduct(productsInOrder[i].quantity, productsInOrder[i].price);
+    sumForOneProducts.add(sumForOneProduct);
+    print('sumForOneProducts $sumForOneProducts');
+    }
     print('order $productsInOrder');
-    num total =
-        productsInOrder.fold(0, (sum, item) => sum + num.parse(item.price));
+    num total = sumForOneProducts.reduce((a, b) => a + b);
     return total;
   }
 
@@ -134,7 +143,7 @@ String orderRes;
       'total_price': calculateTotalPriceForOrder(),
       'products': productsInOrder
           .map((e) =>
-              {'product_id': e.id, 'price': e.price, 'quantity': e.quantity})
+              {'product_id': e.id, 'price': e.price, 'quantity': e.quantity,'otherProduct':e.notes, 'shop_name':e.shop.shop_name})
           .toList()
     };
   }

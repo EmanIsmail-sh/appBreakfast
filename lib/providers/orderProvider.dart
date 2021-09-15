@@ -34,6 +34,7 @@ class OrderProvider extends ChangeNotifier {
       List<Order> orderList = [];
       // print('res${response.data['products']}');
       var res = response.data['order'] as List<dynamic>;
+      print('get order res $res');
       orderList = res
           .map(
             (e) => Order(
@@ -49,6 +50,7 @@ class OrderProvider extends ChangeNotifier {
                       price: p['pivot']['price'].toString(),
                       quantity: p['pivot']['quantity'].toString(),
                       type: p['type'],
+                      notes: p['pivot']['otherProduct'],
                       shop: Shop(
                         id: p['shop']['id'].toString(),
                         shop_name: p['shop']['shop_name'],
